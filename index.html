@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>yamukbracken | Modern Streetwear</title>
+    <style>
+        /* CSS Reset & Variables */
+        :root {
+            --cream: #F9F9F6;
+            --charcoal: #2D2D2D;
+            --sage: #8A9A5B;
+            --light-gray: #E5E5E5;
+            --font-main: 'Helvetica Neue', Arial, sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--cream);
+            color: var(--charcoal);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Enter Screen for Audio Autoplay */
+        #enter-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: var(--charcoal);
+            color: var(--cream);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            cursor: pointer;
+            transition: opacity 0.5s ease-out;
+        }
+
+        #enter-screen h1 {
+            font-size: 2rem;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.7; }
+            50% { opacity: 1; }
+            100% { opacity: 0.7; }
+        }
+
+        /* Navigation */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 5%;
+            background-color: var(--cream);
+            border-bottom: 1px solid var(--light-gray);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .brand-logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+            cursor: pointer;
+            text-transform: lowercase;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        nav ul li {
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: color 0.3s;
+        }
+
+        nav ul li:hover {
+            color: var(--sage);
+        }
+
+        .cart-icon {
+            font-weight: bold;
+            cursor: pointer;
+            background: var(--charcoal);
+            color: var(--cream);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            transition: background 0.3s;
+        }
+
+        .cart-icon:hover {
+            background: var(--sage);
+        }
+
+        /* Page Management */
+        .page-section {
+            display: none;
+            min-height: 80vh;
+        }
+
+        .page-section.active {
+            display: block;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Home Page - Hero */
+        .hero {
+            background-color: var(--charcoal);
+            color: var(--cream);
+            text-align: center;
+            padding: 6rem 1rem;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            color: #ccc;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--sage);
+            color: var(--cream);
+            padding: 1rem 2.5rem;
+            font-size: 1rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            border: none;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s;
+        }
+
+        .btn:hover {
+            background-color: #7a8850;
+            transform: scale(1.02);
+        }
+
+        /* Container & Titles */
+        .container {
+            padding: 4rem 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid var(--charcoal);
+            display: inline-block;
+            padding-bottom: 0.5rem;
+        }
+
+        /* Product Grid */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .product-card {
+            background: #fff;
+            padding: 1rem;
+            cursor: pointer;
+            transition: box-shadow 0.3s, transform 0.3s;
+            text-align: center;
+            border: 1px solid var(--light-gray);
+        }
+
+        .product-card:hover {
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            transform: translateY(-5px);
+        }
+
+        .product-card img {
+            width: 100%;
+            height: auto;
+            aspect-ratio: 1/1;
+            object-fit: cover;
+            background-color: #111; 
+            margin-bottom: 1rem;
+        }
+
+        .product-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+        }
+
+        .product-price {
+            color: var(--sage);
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        /* Product Detail Page */
+        .product-detail-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+        }
+
+        .product-detail-img {
+            width: 100%;
+            background-color: #111;
+        }
+
+        .product-info h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+        }
+
+        .product-info .price {
+            font-size: 1.5rem;
+            color: var(--sage);
+            font-weight: bold;
+            margin-bottom: 2rem;
+        }
+
+        .product-info p {
+            margin-bottom: 2rem;
+            color: #555;
+        }
+
+        .selector {
+            margin-bottom: 2rem;
+        }
+        
+        .selector select {
+            width: 100%;
+            padding: 1rem;
+            font-size: 1rem;
+            border: 1px solid var(--charcoal);
+            background: transparent;
+            cursor: pointer;
+        }
+
+        .btn-full {
+            width: 100%;
+            padding: 1.2rem;
+        }
+
+        /* Filters */
+        .filters {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        .filters select {
+            padding: 0.5rem;
+            border: 1px solid var(--light-gray);
+            background: #fff;
+        }
+
+        /* Cart & Checkout */
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--light-gray);
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--charcoal);
+            color: var(--cream);
+            text-align: center;
+            padding: 4rem 5%;
+        }
+
+        footer input[type="email"] {
+            padding: 0.8rem;
+            width: 250px;
+            border: none;
+            outline: none;
+        }
+
+        footer button {
+            padding: 0.8rem 1.5rem;
+            background: var(--sage);
+            color: var(--cream);
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .product-detail-layout {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            nav ul {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="enter-screen" onclick="enterSite()">
+        <h1>Click to Enter</h1>
+    </div>
+
+    <div id="audio-container" style="display: none;"></div>
+
+    <header>
+        <div class="brand-logo" onclick="navigate('home')">yamukbracken</div>
+        <nav>
+            <ul>
+                <li onclick="navigate('shop')">Shop</li>
+                <li onclick="navigate('about')">About Us</li>
+            </ul>
+        </nav>
+        <div class="cart-icon" onclick="navigate('cart')">Cart (<span id="cart-count">0</span>)</div>
+    </header>
+
+    <section id="home" class="page-section active">
+        <div class="hero">
+            <h1>Define Your Vibe</h1>
+            <p>Premium streetwear for the modern edge.</p>
+            <button class="btn" onclick="navigate('shop')">Shop Now</button>
+        </div>
+
+        <div class="container">
+            <h2 class="section-title">NEW DROP</h2>
+            <div class="product-grid">
+                <div class="product-card" onclick="viewProduct()">
+                    <img src="image_69f2d3.jpg" onerror="this.onerror=null; this.src='https://via.placeholder.com/400x400/111111/ffffff?text=ICEMAN+TEE+IMAGE+NOT+FOUND';" alt="Iceman Tee">
+                    <div class="product-title">Iceman Tee</div>
+                    <div class="product-price">800 TL</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="shop" class="page-section">
+        <div class="container">
+            <h2 class="section-title">All Products</h2>
+            
+            <div class="filters">
+                <select>
+                    <option>Size: All</option>
+                    <option>S</option>
+                    <option>M</option>
+                    <option>L</option>
+                    <option>XL</option>
+                </select>
+                <select>
+                    <option>Sort By: Featured</option>
+                    <option>Price: Low to High</option>
+                    <option>Price: High to Low</option>
+                </select>
+            </div>
+
+            <div class="product-grid">
+                <div class="product-card" onclick="viewProduct()">
+                    <img src="image_69f2d3.jpg" onerror="this.onerror=null; this.src='https://via.placeholder.com/400x400/111111/ffffff?text=ICEMAN+TEE+IMAGE+NOT+FOUND';" alt="Iceman Tee">
+                    <div class="product-title">Iceman Tee</div>
+                    <div class="product-price">800 TL</div>
+                </div>
+                <div class="product-card" onclick="alert('Coming soon!')">
+                    <div style="width:100%; aspect-ratio:1/1; background:#eee; margin-bottom:1rem; display:flex; align-items:center; justify-content:center; color:#999;">Sold Out</div>
+                    <div class="product-title">Classic Logo Hoodie</div>
+                    <div class="product-price">1200 TL</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="product" class="page-section">
+        <div class="container">
+            <div class="product-detail-layout">
+                <div>
+                    <img src="image_69f2d3.jpg" onerror="this.onerror=null; this.src='https://via.placeholder.com/600x600/111111/ffffff?text=ICEMAN+TEE+IMAGE+NOT+FOUND';" alt="Iceman Tee" class="product-detail-img">
+                </div>
+                <div class="product-info">
+                    <h1>Iceman Tee</h1>
+                    <div class="price">800 TL</div>
+                    <p>Elevate your streetwear collection with the Iceman Tee. Crafted from premium heavy-weight cotton for a structured yet comfortable fit. Featuring our signature crystal-embellished hand graphic on the front. Clean, bold, and strictly limited.</p>
+                    
+                    <div class="selector">
+                        <select id="size-selector">
+                            <option value="">Select Size</option>
+                            <option value="S">Small</option>
+                            <option value="M">Medium</option>
+                            <option value="L">Large</option>
+                            <option value="XL">X-Large</option>
+                        </select>
+                    </div>
+
+                    <button class="btn btn-full" onclick="addToCart()">Add to Cart</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="page-section">
+        <div class="container" style="max-width: 800px; text-align: center;">
+            <h2 class="section-title">About Us</h2>
+            <p style="font-size: 1.2rem; color: #555; margin-top: 2rem;">
+                <strong>yamukbracken</strong> is more than just clothing; it's a statement. Born from the streets and designed for those who refuse to blend in. Our mission is to provide high-quality, minimalist yet edgy pieces that speak for themselves. No compromises on fabric, no shortcuts on design. Just raw, authentic style.
+            </p>
+        </div>
+    </section>
+
+    <section id="cart" class="page-section">
+        <div class="container" style="max-width: 600px;">
+            <h2 class="section-title">Your Cart</h2>
+            <div id="cart-items-container">
+                <p style="color: #777;">Your cart is currently empty.</p>
+            </div>
+            <div style="margin-top: 2rem; text-align: right; border-top: 2px solid var(--charcoal); padding-top: 1rem; display: none;" id="checkout-section">
+                <h3>Total: <span id="cart-total">0</span> TL</h3>
+                <button class="btn" style="margin-top: 1rem;" onclick="checkout()">Proceed to Checkout</button>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <h3 style="margin-bottom: 1rem; text-transform: uppercase;">Join the Club</h3>
+        <p style="margin-bottom: 1.5rem; color: #ccc;">Subscribe for exclusive drops and early access.</p>
+        <div style="margin-bottom: 3rem;">
+            <input type="email" placeholder="Enter your email">
+            <button onclick="alert('Subscribed successfully!')">JOIN</button>
+        </div>
+        <p style="font-size: 0.8rem; color: #888;">&copy; 2026 yamukbracken. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Start audio and enter site
+        function enterSite() {
+            const enterScreen = document.getElementById('enter-screen');
+            enterScreen.style.opacity = '0';
+            
+            // Insert YouTube iframe with Autoplay
+            const audioContainer = document.getElementById('audio-container');
+            audioContainer.innerHTML = '<iframe width="0" height="0" src="https://www.youtube.com/embed/RJDZBozre1g?autoplay=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>';
+            
+            setTimeout(() => {
+                enterScreen.style.display = 'none';
+            }, 500);
+        }
+
+        let cartItems = 0;
+        let cartTotalValue = 0;
+
+        // Function to handle single page navigation
+        function navigate(pageId) {
+            const pages = document.querySelectorAll('.page-section');
+            pages.forEach(page => page.classList.remove('active'));
+
+            document.getElementById(pageId).classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // View specific product
+        function viewProduct() {
+            navigate('product');
+        }
+
+        // Add to Cart functionality
+        function addToCart() {
+            const size = document.getElementById('size-selector').value;
+            if (size === "") {
+                alert("Lütfen önce bir beden seçin.");
+                return;
+            }
+
+            cartItems++;
+            cartTotalValue += 800; // Price of Iceman Tee
+            
+            document.getElementById('cart-count').innerText = cartItems;
+
+            const cartContainer = document.getElementById('cart-items-container');
+            if(cartItems === 1) {
+                cartContainer.innerHTML = '';
+                document.getElementById('checkout-section').style.display = 'block';
+            }
+
+            const itemHtml = `
+                <div class="cart-item">
+                    <div>
+                        <strong>Iceman Tee</strong><br>
+                        <small>Beden: ${size}</small>
+                    </div>
+                    <div style="color: var(--sage); font-weight: bold;">800 TL</div>
+                </div>
+            `;
+            cartContainer.insertAdjacentHTML('beforeend', itemHtml);
+            document.getElementById('cart-total').innerText = cartTotalValue;
+
+            alert("Iceman Tee (Beden: " + size + ") sepete eklendi!");
+        }
+
+        // Checkout simulation
+        function checkout() {
+            alert("Güvenli ödeme sayfasına yönlendiriliyorsunuz... Toplam: " + cartTotalValue + " TL");
+            cartItems = 0;
+            cartTotalValue = 0;
+            document.getElementById('cart-count').innerText = "0";
+            document.getElementById('cart-items-container').innerHTML = '<p style="color: #777;">Sepetiniz şu an boş.</p>';
+            document.getElementById('checkout-section').style.display = 'none';
+            navigate('home');
+        }
+    </script>
+</body>
+</html>
